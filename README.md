@@ -16,4 +16,11 @@ $#      -  number of arguments passed to the shell file
 
 bash .\script.sh  
 
+"one argument"  -  passed as one argument (double quotes enables Shell Expansions  ($ ` \ newline)
+                   https://www.gnu.org/software/bash/manual/html_node/Double-Quotes.html
+'one argument'  -  passed as one argument (single quotes ignore all special chars)
+                   https://www.gnu.org/software/bash/manual/html_node/Single-Quotes.html#Single-Quotes
+`command`       -  results of command passed as one argument
+
+
 
