@@ -23,4 +23,18 @@ bash .\script.sh
 `command`       -  results of command passed as one argument
 
 
+---
+### NOTES
+du -csh *
+List all files in the current directory with size
 
+ls -l --sort=size | head -10  
+List the 10 biggest files of current directory. 
+If you find which file is growing and with which data you are a step nearer to the solution
+
+
+Cleaning all logs on a Linux system without deleting the files:
+for CLEAN in $(find /var/log/ -type f)
+do
+    cp /dev/null  $CLEAN
+done
