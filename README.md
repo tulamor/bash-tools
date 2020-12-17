@@ -38,7 +38,7 @@ test 10 -eq 11 # exit code 1
 [ expression ] && command # run command if expresssion returns True  
   
 #STRING COMPARISON  
-str1 = str2  
+str1 == str2  
 str1 != str2  
 str # True if str is not null  
 -n str # True if the length of str is greater than zero  
@@ -63,7 +63,25 @@ file1 -nt file2 # if file1 is newer than file2 (by modification date)
 !expression # true if expression is not true  
 exp1 -a exp2 # True if exp1 and exp2 are true (&&, and)  
 exp1 -o exp2 # True if exp1 or exp2 is true (||, or)  
-  
+
+#CONDITIONAL STATEMENT
+if [ expression ]; then command; elif [ expression ]; then command; else command; fi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ---
 #NOTES
 Test if $var is an integer:  
