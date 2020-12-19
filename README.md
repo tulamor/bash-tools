@@ -21,7 +21,8 @@ $#      -  number of arguments passed to the shell file
 IFS - The shell treats each character of IFS as a delimiter, and splits the results of the other expansions into words on these characters.  
   
 echo "grapefruit|grapes|peach|mango" > fruits.txt  
-#!/bin/bash  
+  
+\#!/bin/bash  
 file=./fruits.txt  
   
 # set the Internal Field Separator to |  
@@ -89,8 +90,26 @@ exp1 -o exp2 # True if exp1 or exp2 is true (||, or)
 #CONDITIONAL STATEMENT
 if [ expression ]; then command; elif [ expression ]; then command; else command; fi
 
+#FOR LOOP
+for variable in list; do
+        commands
+    done
 
+echo $@
+for var1 in $@; do
+echo $var1
+done
 
+while [ expression ]; do
+    commands
+done
+
+until [ expression ]; do
+    commands
+done
+  
+`while` runs the loop WHILE the condition is TRUE
+`until` runs the loop UNTIL the condition is TRUE
 
 
 
