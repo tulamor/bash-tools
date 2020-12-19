@@ -3,7 +3,9 @@ echo $var
 var=`echo command`  
 echo $var  
 command  
-----
+  
+----  
+  
 #!/bin/bash  
 #Arguments can be accessed using $x where x is the index of the argument 0-9:  
 $0      -  the name of the file  
@@ -13,14 +15,34 @@ $?      -  exit code of the last command
 $*      -  list of all arguments  
 $@"
 $#      -  number of arguments passed to the shell file  
----
-bash .\script.sh  
+  
+---  
+  
+IFS - The shell treats each character of IFS as a delimiter, and splits the results of the other expansions into words on these characters.  
+  
+echo "grapefruit|grapes|peach|mango" > fruits.txt  
+#!/bin/bash  
+file=./fruits.txt  
+  
+# set the Internal Field Separator to |  
+IFS='|'
+while read -r first_fruit second_fruit third_fruit last_fruit  
+do  
+        printf "... %s ...\n" $first_fruit  
+        printf "... %s ...\n" $second_fruit  
+        printf "... %s ...\n" $third_fruit  
+done < "$file"  
+  
+---  
+  
 "one argument"  -  passed as one argument (double quotes enables Shell Expansions  ($ ` \ newline)  
                    https://www.gnu.org/software/bash/manual/html_node/Double-Quotes.html  
 'one argument'  -  passed as one argument (single quotes ignore all special chars)  
                    https://www.gnu.org/software/bash/manual/html_node/Single-Quotes.html#Single-Quotes  
 `command`       -  results of command passed as one argument  
----
+
+---  
+
 #INTEGER COMPARISON  
 -eq # equal  
 -ge # greater or equal  
@@ -88,15 +110,26 @@ Test if $var is an integer:
 if [ `expr $a + 1 2> /dev/null` ] ; then echo $a is numeric ; else echo $a is not numeric ; fi ;  
   
 du -csh *  
-List all files in the current directory with size  
-  
+List all files in the current directory with size
+
 ls -l --sort=size | head -10  
 List the 10 biggest files of current directory.  
 If you find which file is growing and with which data you are a step nearer to the solution  
-  
+-----
+`du -csh * | sort -rh`
+List the size of all files and summarized size of directories inside current directory
+du
+    -s (display only a total for each argument)
+    -h (print sizes in human readable format)
+sort
+    -r (descending order)
+    -h (compare human readable numbers (e.g., 2K 1G))
+----
 
 Cleaning all logs on a Linux system without deleting the files:  
 for CLEAN in $(find /var/log/ -type f)  
 do  
     cp /dev/null  $CLEAN  
 done  
+
+
