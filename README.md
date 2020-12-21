@@ -161,15 +161,32 @@ i=$(( i++))
 let i++
 
 #Operation with assignment
-a*=b a=(a*b)
-a/=b a=(a/b)
-a%=b a=(a%b)
-a+=b a=(a+b)
-a-=b a=(a-b)
+a*=b # a=(a*b)
 
+#Array
+array=(red green blue yellow magenta)
+echo $array      # red
+echo ${array[2]} # blue
+echo ${array[*]} # red green blue yellow magenta
+len=${#array[*]} # len = 5
 
+i=0
+while [ $i -lt $len ]; do
+    echo "$i: ${array[$i]}"
+    let i++
+done
+
+Output:
+0: red
+1: green
+2: blue
+3: yellow
+4: magenta
 
 ---
+#get date
+date +%F" "%H:%M:%S
+
 #NOTES
 Test if $var is an integer:  
 if [ `expr $a + 1 2> /dev/null` ] ; then echo $a is numeric ; else echo $a is not numeric ; fi ;  
