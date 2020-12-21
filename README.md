@@ -89,8 +89,8 @@ exp1 -o exp2 # True if exp1 or exp2 is true (||, or)
 
 #CONDITIONAL STATEMENT
 if [ expression ]; then command; elif [ expression ]; then command; else command; fi
-
-#FOR LOOP
+-----------------------
+#LOOPS
 for variable in list; do
         commands
     done
@@ -111,15 +111,61 @@ done
 `while` runs the loop WHILE the condition is TRUE
 `until` runs the loop UNTIL the condition is TRUE
 
+case string in
+    str1)
+        command1
+        ;;
+    str2)
+        command2
+        ;;
+    *)
+        command3
+        ;;
+esac  
+-----------------------
+#input/output descriptors
+0 stdin
+1 stdout
+2 stderr
+<file       take input from
+>file       write output to
+>>file      append
+<<word      read input until line matches word
+<>file      open for reading and writing
+<&digit     use file descriptor as input
+<&-         close stdin
+>&-         close stdout
+cmd1|cmd2   stdout of cmd1 is piped to stdin of cmd2  
+-----------------------
+#FUNCTIONS
 
+fname () {
+    command
+}
 
+echo Please, enter your firstname and lastname
+read FN LN
+echo "Hi! $LN, $FN !"
 
+cd /notexistingdirectory &> /dev/null
+echo $? # 1
 
+-----------------------
+#ARITHMETIC & BASH-EXPANSION
+`let` is a builtin command of the Bash shell that evaluates arithmetic expressions.
+Using let is similar to enclosing an arithmetic expression in double parentheses:
 
+i=$(( i + 1 ))
+let i+=1
+i=$(( i++))
+let i++
 
-
-
-
+#Operation with assignment
+a*=b a=(a*b)
+a/=b a=(a/b)
+a%=b a=(a%b)
+a+=b a=(a+b)
+a-=b a=(a-b)
 
 
 
