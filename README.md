@@ -136,54 +136,61 @@ esac
 <&-         close stdin
 >&-         close stdout
 cmd1|cmd2   stdout of cmd1 is piped to stdin of cmd2  
------------------------
-#FUNCTIONS
+-----------------------  
+#FUNCTIONS  
+  
+fname () {  
+    command  
+}  
+  
+echo Please, enter your firstname and lastname  
+read FN LN  
+echo "Hi! $LN, $FN !"  
+ 
+cd /notexistingdirectory &> /dev/null  
+echo $? # 1  
+  
+-----------------------  
+#ARITHMETIC & BASH-EXPANSION  
+`let` is a builtin command of the Bash shell that evaluates arithmetic expressions.  
+Using let is similar to enclosing an arithmetic expression in double parentheses:  
+  
+i=$(( i + 1 ))  
+let i+=1  
+i=$(( i++))  
+let i++  
+  
+#Operation with assignment  
+a*=b # a=(a*b)  
 
-fname () {
-    command
-}
+#Array  
+array=(red green blue yellow magenta)  
+echo $array      # red  
+echo ${array[2]} # blue  
+echo ${array[*]} # red green blue yellow magenta  
+len=${#array[*]} # len = 5  
+  
+i=0  
+while [ $i -lt $len ]; do  
+    echo "$i: ${array[$i]}"  
+    let i++  
+done  
+  
+Output:  
+0: red  
+1: green  
+2: blue  
+3: yellow  
+4: magenta  
+---  
+#SED (Stream Editor)  
+sed 's/\/usr\/local\/bin/\/common\/bin/' < old > new  
+takes string from old file and writes out into new file  
+"/" is the delimiter which could be any other character than backslash or newline instead of a slash  
+sed 's|/usr/local/bin|/common/bin|' < old > new
 
-echo Please, enter your firstname and lastname
-read FN LN
-echo "Hi! $LN, $FN !"
 
-cd /notexistingdirectory &> /dev/null
-echo $? # 1
 
------------------------
-#ARITHMETIC & BASH-EXPANSION
-`let` is a builtin command of the Bash shell that evaluates arithmetic expressions.
-Using let is similar to enclosing an arithmetic expression in double parentheses:
-
-i=$(( i + 1 ))
-let i+=1
-i=$(( i++))
-let i++
-
-#Operation with assignment
-a*=b # a=(a*b)
-
-#Array
-array=(red green blue yellow magenta)
-echo $array      # red
-echo ${array[2]} # blue
-echo ${array[*]} # red green blue yellow magenta
-len=${#array[*]} # len = 5
-
-i=0
-while [ $i -lt $len ]; do
-    echo "$i: ${array[$i]}"
-    let i++
-done
-
-Output:
-0: red
-1: green
-2: blue
-3: yellow
-4: magenta
-
----
 #get date
 date +%F" "%H:%M:%S
 
