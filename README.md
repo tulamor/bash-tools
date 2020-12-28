@@ -208,7 +208,15 @@ takes string from old file and writes out into new file
 ```bash
 sed 's|/usr/local/bin|/common/bin|' < old > new
 ```
-
+Apply multiple find-replace expressions to a file:
+```bash
+sed -e 's/{{find}}/{{replace}}/' -e 's/{{find}}/{{replace}}/' {{filename}}
+```
+Lines with matched regex are printed:
+```bash
+sed -n 's/REGEX/&/p' text.txt
+cat text.txt | grep -i "REGEX"
+```
 ___
 ___
 # NOTES
@@ -247,6 +255,10 @@ Cleaning all logs on a Linux system without deleting the files:
 ```bash
 for CLEAN in $(find /var/log/ -type f); do  
     cp /dev/null  $CLEAN  
-done  
+done
 ```
-
+Append to restricted file:
+```bash
+sudo bash -c 'echo "string" > file'
+echo "string" | sudo tee file.txt  # add -a to append
+```
