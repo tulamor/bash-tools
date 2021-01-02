@@ -212,13 +212,49 @@ Apply multiple find-replace expressions to a file:
 ```bash
 sed -e 's/{{find}}/{{replace}}/' -e 's/{{find}}/{{replace}}/' {{filename}}
 ```
-Lines with matched regex are printed:
+2 ways to print lines with matched regex:
 ```bash
 sed -n 's/REGEX/&/p' text.txt
 cat text.txt | grep -i "REGEX"
 ```
 ___
 ___
+
+# REGEX
+. (dot) Any single character except newline
+* zero or more occurances of any character
+[. . . ] Any single character specified in the set
+[^. . . ] Any single character not specified in the set
+^ Anchor - beginning of the line
+$ Anchor - end of line
+\< Anchor - begining of word
+\> Anchor - end of word
+\(. . . \) Grouping - usually used to group conditions
+\n Contents of nth grouping
+————————————————————–
+[. . . ] Set Examples [A-Z] The SET from Capital A to Capital Z
+[a-z] The SET from lowercase a to lowercase z
+[0-9] The SET from 0 to 9 (All numerals)
+[./=+] The SET containing . (dot), / (slash), =, and +
+[-A-F] The SET from Capital A to Capital F and the dash (dashes must be specified first)
+[0-9 A-Z] The SET containing all capital letters and digits and a space
+[A-Z][a-zA-Z] In the first position, the SET from Capital A to Capital Z In the second char-
+acter position, the SET containing all lettersChapter 3. Editor - Quick References
+3.2.12
+29
+Regular Expression Examples
+/Hello/ Matches if the line contains the value Hello
+/^TEST$/ Matches if the line contains TEST by itself
+/^[a-zA-Z]/ Matches if the line starts with any letter
+/^[a-z].*/ Matches if the first character of the line is a-z and there is at least one more of any
+character following it
+/2134$/ Matches if line ends with 2134
+/\(21|35\)/ Matches is the line contains 21 or 35; Note the use of ( ) with the pipe symbol to
+specify the ’or’ condition
+/[0-9]*/ Matches if there are zero or more numbers in the line
+/^[^#]/ Matches if the first character is not a # in the line
+
+
 # NOTES
 
 Get date:
