@@ -1,10 +1,18 @@
+
 ```bash
 var=value
-echo $var
+NAME="Alex"
+echo ${NAME}     #   Alex
+echo $NAME       #   Alex
+echo "$NAME"     #   Alex
+echo '$NAME'     #   $NAME
+echo "${NAME}!"  #   Alex!
 var=`echo command`
 echo $var
 command
 ```
+## Arguments
+Special parameters
 ```
 Arguments can be accessed using $x where x is the index of the argument 0-9:
 $0      -  the name of the file  or the function
@@ -14,8 +22,11 @@ $?      -  exit code of the last command
 $#      -  number of arguments passed to the shell file/function
 $*      -  list of all arguments, "$*" expands to a single string separated
            by space (the first character of IFS) - "$1 $2 $n"
-$@"     -  list of all arguments, "$@" expands to separate strings - "$1" "$2" "$n"
+$@      -  list of all arguments, "$@" expands to separate strings - "$1" "$2" "$n"
            When not double-quoted, $* and $@ are the same
+$$      -  process id of the shell
+$_      -  last argument of the previous command
+$-      -  current options
 ```
 IFS - The shell treats each character of IFS as a delimiter, and splits the results of the other expansions into words on these characters.  
 ```bash
@@ -255,6 +266,8 @@ specify the ’or’ condition
 /^[^#]/ Matches if the first character is not a # in the line
 
 
+
+
 # NOTES
 
 Get date:
@@ -298,3 +311,6 @@ Append to restricted file:
 sudo bash -c 'echo "string" > file'
 echo "string" | sudo tee file.txt  # add -a to append
 ```
+
+## Information Source
+https://wiki.bash-hackers.org/start
