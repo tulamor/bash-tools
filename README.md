@@ -8,8 +8,9 @@ echo "$NAME"     #   Alex
 echo '$NAME'     #   $NAME
 echo "${NAME}!"  #   Alex!
 var=`echo command`
-echo $var
-command
+echo $var        # command
+function_name () { echo `date`; }
+echo $(function_name) # Mon 04 Jan 2021 06:55:50 PM EST
 ```
 ## Arguments
 Special parameters
