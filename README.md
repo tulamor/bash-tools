@@ -52,6 +52,18 @@ done < "$file"
                    https://www.gnu.org/software/bash/manual/html_node/Single-Quotes.html#Single-Quotes
 `command`       -  results of command passed as one argument
 ```
+## Brace expansion
+```bash
+echo {A, B}     # A B
+echo {A, B}.js  # A.js B.js
+{1..5}          # 1 2 3 4 5
+```
+## Command substitution
+```bash
+echo "I'm in $(PWD)"
+# Same as:
+echo "I'm in `pwd`"
+```
 ```
 INTEGER COMPARISON  
 -eq # equal  
