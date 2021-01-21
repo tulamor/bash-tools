@@ -12,8 +12,11 @@ echo $var        # command
 function_name () { echo `date`; }
 echo $(function_name) # Mon 04 Jan 2021 06:55:50 PM EST
 ```
+
 ## Arguments
+
 Special parameters
+
 ```
 Arguments can be accessed using $x where x is the index of the argument 0-9:
 $0      -  the name of the file  or the function
@@ -29,10 +32,13 @@ $$      -  process id of the shell
 $_      -  last argument of the previous command
 $-      -  current options
 ```
-IFS - The shell treats each character of IFS as a delimiter, and splits the results of the other expansions into words on these characters.  
+
+IFS - The shell treats each character of IFS as a delimiter, and splits the results of the other expansions into words on these characters.
+
 ```bash
 echo "grapefruit|grapes|peach|mango" > fruits.txt
-```  
+```
+
 ```bash
 #!/bin/bash  
 file=./fruits.txt
@@ -45,6 +51,7 @@ do
         printf "... %s ...\n" $third_fruit
 done < "$file"
 ```
+
 ```
 "one argument"  -  passed as one argument (double quotes enables Shell Expansions ($ \` \ newline)  
                    https://www.gnu.org/software/bash/manual/html_node/Double-Quotes.html
@@ -52,18 +59,23 @@ done < "$file"
                    https://www.gnu.org/software/bash/manual/html_node/Single-Quotes.html#Single-Quotes
 `command`       -  results of command passed as one argument
 ```
+
 ## Brace expansion
+
 ```bash
 echo {A, B}     # A B
 echo {A, B}.js  # A.js B.js
-{1..5}          # 1 2 3 4 5
+echo {1..5}     # 1 2 3 4 5
 ```
+
 ## Command substitution
+
 ```bash
 echo "I'm in $(PWD)"
 # Same as:
 echo "I'm in `pwd`"
 ```
+
 ```
 INTEGER COMPARISON  
 -eq # equal  
@@ -163,21 +175,57 @@ esac
 cmd1|cmd2   stdout of cmd1 is piped to stdin of cmd2  
 ```
 
-###  FUNCTIONS  
-```bash  
+---
+
+### FUNCTIONS
+
+```bash
 function_name () {
   commands
 } 
-# Oneliner:
+# Oneliner
 function_name () { commands; }
 
-
+# Alternative syntax
 function function_name {
   commands
 }
 
 function function_name { commands; }
+
+# return
+myfunc() {
+    local myresult='some value'
+    echo $myresult
+}
+result="$(myfunc)"
+
+# Raising errors
+myfunc() {
+    return 1
+}
+
+if myfunc; then
+    echo "success"
+else
+    echo "failure"
+fi
 ```
+
+### Arrays as arguments
+
+```bash
+function extract()
+{
+    local -n myarray=$1
+    local idx=$2
+    echo "${myarray[$idx]}"
+}
+Fruits=('Apple' 'Banana' 'Orange')
+extract Fruits 2     # => Orangle
+```
+
+
 ```bash
 echo Please, enter your firstname and lastname  
 read FN LN  
@@ -199,52 +247,36 @@ let i++
 #Operation with assignment  
 a*=b # a=(a*b)  
 ```
-### ARRAY
-```bash
-array=(red green blue yellow magenta)  
-echo $array      # red  
-echo ${array[2]} # blue  
-echo ${array[*]} # red green blue yellow magenta  
-len=${#array[*]} # len = 5  
-  
-i=0  
-while [ $i -lt $len ]; do  
-    echo "$i: ${array[$i]}"  
-    let i++  
-done  
-```
-
-Output:
-```
-0: red
-1: green
-2: blue
-3: yellow  
-4: magenta
-```
 ---  
 ### SED (Stream Editor)
+
 ```bash
 sed 's/\/usr\/local\/bin/\/common\/bin/' < old > new
 ```
+
 takes string from old file and writes out into new file  
 "/" is the delimiter which could be any other character than backslash or newline instead of a slash
+
 ```bash
 sed 's|/usr/local/bin|/common/bin|' < old > new
 ```
+
 Apply multiple find-replace expressions to a file:
+
 ```bash
 sed -e 's/{{find}}/{{replace}}/' -e 's/{{find}}/{{replace}}/' {{filename}}
 ```
+
 2 ways to print lines with matched regex:
+
 ```bash
 sed -n 's/REGEX/&/p' text.txt
 cat text.txt | grep -i "REGEX"
 ```
-___
-___
 
+---
 # REGEX
+```
 . (dot) Any single character except newline
 * zero or more occurances of any character
 [. . . ] Any single character specified in the set
@@ -277,30 +309,492 @@ character following it
 specify the ’or’ condition
 /[0-9]*/ Matches if there are zero or more numbers in the line
 /^[^#]/ Matches if the first character is not a # in the line
-
-
-
-
-# NOTES
-
-Get date:
-```bash
-date +%F" "%H:%M:%S
 ```
 
-Test if `$var` is an integer: 
+## Parameter expansions
+
+```bash
+${FOO%suffix}   # Remove suffix
+${FOO#prefix}   # Remove prefix
+${FOO%%suffix}  # Remove long suffix
+${FOO##prefix}  # Remove long prefix
+${FOO/from/to}  # Replace first match
+${FOO//from/to} # Replace all
+${FOO/%from/to} # Replace suffix
+${FOO/#from/to} # Replace prefix
+```
+
+### Substrings
+
+```bash
+${FOO:0:3}      # Substring (position, length)
+${FOO:(-3):3}   # Substring from the right
+
+${#FOO}         # Length of $FOO
+
+Default values
+${FOO:-val}     # $FOO, or val if unset
+${FOO:=val}     # Set $FOO to val if unset
+${FOO:+val}     # val if $FOO is set
+${FOO:?message} # Show message and exit if $FOO is unset
+```
+
+---
+
+## Substitution
+
+```bash
+echo ${food:-Cake}  #=> $food or "Cake"
+
+STR="/path/to/foo.cpp"
+echo ${STR%.cpp}    # /path/to/foo
+echo ${STR%.cpp}.o  # /path/to/foo.o
+echo ${STR%/*}      # /path/to
+
+echo ${STR##*.}     # cpp (extension)
+echo ${STR##*/}     # foo.cpp (basepath)
+
+echo ${STR#*/}      # path/to/foo.cpp
+echo ${STR##*/}     # foo.cpp
+
+echo ${STR/foo/bar} # /path/to/bar.cpp
+```
+
+## Slice
+
+```bash
+name="John"
+echo ${name}           # => John
+echo ${name:0:2}       # => Jo
+echo ${name::2}        # => Jo
+echo ${name::-1}       # => Joh
+echo ${name:(-1)}      # => n
+echo ${name:(-2)}      # => hn
+echo ${name:(-2):2}    # => hn
+
+# length = 2
+echo ${name:0:length}  # => Jo
+
+## basepath & dirpath
+SRC="/path/to/foo.cpp"
+
+BASEPATH=${SRC##*/}   
+echo $BASEPATH  # => "foo.cpp"
+
+
+DIRPATH=${SRC%$BASEPATH}
+echo $DIRPATH   # => "/path/to/"
+```
+
+## Transform
+```bash
+STR="HELLO WORLD!"
+echo ${STR,}   # => hELLO WORLD!
+echo ${STR,,}  # => hello world!
+
+STR="hello world!"
+echo ${STR^}   # => Hello world!
+echo ${STR^^}  # => HELLO WORLD!
+
+ARR=(hello World)
+echo "${ARR[@],}" # => hello world
+echo "${ARR[@]^}" # => Hello World
+```
+
+---
+
+## Arrays
+
+```bash
+Fruits=('Apple' 'Banana' 'Orange')
+Fruits[0]="Apple"
+Fruits[1]="Banana"
+Fruits[2]="Orange"
+ARRAY2=(foo{1..2}) # => foo1 foo2
+ARRAY3=({A..D})    # => A B C D
+# declare construct
+declare -a Numbers=(1 2 3 4 5 6)
+```
+
+### Indexing
+
+```bash
+${Fruits[0]}        # First element
+${Fruits[-1]}       # Last element
+${Fruits[*]}        # All elements
+${Fruits[@]}        # All elements
+${#Fruits[@]}       # Number of all
+${#Fruits}          # Length of 1st
+${#Fruits[3]}       # Length of nth
+${Fruits[@]:3:2}    # Range
+${!Fruits[@]}       # Keys of all
+```
+
+### Array operations
+
+```bash
+Fruits=("${Fruits[@]}" "Watermelon")     # Push
+Fruits+=('Watermelon')                   # Also Push
+Fruits=( ${Fruits[@]/Ap*/} )             # Remove by regex match
+unset Fruits[2]                          # Remove one item
+Fruits=("${Fruits[@]}")                  # Duplicate
+Fruits=("${Fruits[@]}" "${Veggies[@]}")  # Concatenate
+lines=(`cat "logfile"`)                  # Read from file
+```
+
+### Itteration
+
+```bash
+Fruits=('Apple' 'Banana' 'Orange')
+for e in "${Fruits[@]}"; do
+    echo $e
+done
+# With index
+for i in "${!Fruits[@]}"; do
+  printf "%s\t%s\n" "$i" "${Fruits[$i]}"
+done
+```
+
+```bash
+array=(red green blue yellow magenta)  
+echo $array      # red  
+echo ${array[2]} # blue  
+echo ${array[*]} # red green blue yellow magenta  
+len=${#array[*]} # len = 5  
+  
+i=0  
+while [ $i -lt $len ]; do  
+    echo "$i: ${array[$i]}"  
+    let i++  
+done  
+```
+
+Output:
+
+```
+0: red
+1: green
+2: blue
+3: yellow  
+4: magenta
+```
+---
+
+## Dictionaries
+
+```bash
+# Define:
+declare -A sounds
+sounds[dog]="bark"
+sounds[cow]="moo"
+sounds[bird]="tweet"
+sounds[wolf]="howl"
+# Operate:
+echo ${sounds[dog]} # Dog's sound
+echo ${sounds[@]}   # All values
+echo ${!sounds[@]}  # All keys
+echo ${#sounds[@]}  # Number of elements
+unset sounds[dog]   # Delete dog
+# Iteration
+for val in "${sounds[@]}"; do
+    echo $val
+done
+for key in "${!sounds[@]}"; do
+    echo $key
+done
+```
+
+## File conditions
+
+```bash
+[[ -e FILE ]]	# Exists
+[[ -d FILE ]]	# Directory
+[[ -f FILE ]]	# File
+[[ -h FILE ]]	# Symlink
+[[ -s FILE ]]	# Size is > 0 bytes
+[[ -r FILE ]]	# Readable
+[[ -w FILE ]]	# Writable
+[[ -x FILE ]]	# Executable
+[[ f1 -nt f2 ]]	# f1newerthan f2
+[[ f1 -ot f2 ]]	# f2olderthan f1
+[[ f1 -ef f2 ]]	# Same files
+```
+
+## continue
+
+```bash
+for number in $(seq 1 3); do
+    if [[ $number == 2 ]]; then
+        continue;
+    fi
+    echo "$number"
+done
+```
+## break
+```bash
+for number in $(seq 1 3); do
+    if [[ $number == 2 ]]; then
+        # Skip entire rest of loop.
+        break;
+    fi
+    # This will only print 1
+    echo "$number"
+done
+```
+## until
+```bash
+count=0
+until [ $count -gt 10 ]; do
+    echo "$count"
+    ((count++))
+done
+```
+## forever
+```bash
+while true; do
+    # here is some code.
+done
+
+# forever (short)
+
+while :; do
+    # here is some code.
+done
+```
+
+## readline
+
+```bash
+cat file.txt | while read line; do
+    echo $line
+done
+```
+
+## Raising errors
+
+```bash
+myfunc() {
+    return 1
+}
+
+if myfunc; then
+    echo "success"
+else
+    echo "failure"
+fi
+```
+
+## Special parameters
+
+```bash
+[[ -e FILE ]]   # Exists
+[[ -d FILE ]]   # Directory
+[[ -f FILE ]]   # File
+[[ -h FILE ]]   # Symlink
+[[ -s FILE ]]   # Size is > 0 bytes
+[[ -r FILE ]]   # Readable
+[[ -w FILE ]]   # Writable
+[[ -x FILE ]]   # Executable
+[[ f1 -nt f2 ]] # f1newerthan f2
+[[ f1 -ot f2 ]] # f2olderthan f1
+[[ f1 -ef f2 ]] # Same files
+```
+
+## Conditions
+
+```bash
+if [ "$1" = 'y' -a $2 -gt 0 ]; then
+    echo "yes"
+fi
+
+if [ "$1" = 'n' -o $2 -lt 0 ]; then
+    echo "no"
+fi
+
+[[ ! EXPR ]]    # NOT
+[[ X && Y ]]    # AND
+[[ X || Y ]]    # OR
+```
+
+## Examples
+
+```bash
+# String
+
+if [[ -z "$string" ]]; then
+    echo "String is empty"
+elif [[ -n "$string" ]]; then
+    echo "String is not empty"
+else
+    echo "This never happens"
+fi
+
+# Combinations
+
+if [[ X && Y ]]; then
+    ...
+fi
+
+# Equal
+
+if [[ "$A" == "$B" ]]; then
+    ...
+fi
+
+# Regex
+
+if [[ '1. abc' =~ ([a-z]+) ]]; then
+    echo ${BASH_REMATCH[1]}
+fi
+
+# Smaller
+
+if (( $a < $b )); then
+   echo "$a is smaller than $b"
+fi
+
+# Exists
+
+if [[ -e "file.txt" ]]; then
+    echo "file exists"
+fi
+```
+
+---
+
+## Loops (examples)
+
+```bash
+for i in /etc/rc.*; do
+    echo $i
+done
+
+
+for ((i = 0 ; i < 100 ; i++)); do
+    echo $i
+done
+
+# Ranges
+for i in {1..5}; do
+    echo "Welcome $i"
+done
+# Ranges with step size
+for i in {5..50..5}; do
+    echo "Welcome $i"
+done
+
+# Autoincrement
+i=1
+while [[ $i -lt 4 ]]; do
+    echo "Number: $i"
+    ((i++))
+done
+
+# Autodecrement
+i=3
+while [[ $i -gt 0 ]]; do
+    echo "Number: $i"
+    ((i--))
+done
+
+# Continue
+for number in $(seq 1 3); do
+    if [[ $number == 2 ]]; then
+        continue;
+    fi
+    echo "$number"
+done
+
+# Break
+for number in $(seq 1 3); do
+    if [[ $number == 2 ]]; then
+        # Skip entire rest of loop.
+        break;
+    fi
+    # This will only print 1
+    echo "$number"
+done
+
+# Until
+count=0
+until [ $count -gt 10 ]; do
+    echo "$count"
+    ((count++))
+done
+
+# Forever
+while true; do
+    # here is some code.
+done
+
+# Forever (short)
+while :; do
+    # here is some code.
+done
+
+# Reading lines
+cat file.txt | while read line; do
+    echo $line
+done
+```
+
+### Special parameters
+
+```bash
+!!	                # Execute last command again
+!!:s/<FROM>/<TO>/	# Replace first occurrence of <FROM> to <TO> in most recent command
+!!:gs/<FROM>/<TO>/	# Replace all occurrences of <FROM> to <TO> in most recent command
+!$:t	            # Expand only basename from last parameter of most recent command
+!$:h	            # Expand only directory from last parameter of most recent command
+```
+!! and !$ can be replaced with any valid expansion.
+
+```bash
+!$	                # Expand last parameter of most recent command  
+!*	                # Expand all parameters of most recent command  
+!-n	                # Expand nth most recent command  
+!n	                # Expand nth command in history  
+!<command>	        # Expand most recent invocation of command <command> 
+```
+
+## Slices
+```
+!!:n	Expand only nth token from most recent command (command is 0; first argument is 1)
+!^	Expand first argument from most recent command
+!$	Expand last token from most recent command
+!!:n-m	Expand range of tokens from most recent command
+!!:n-$	Expand nth token to last from most recent command
+
+!! can be replaced with any valid expansion i.e. !cat, !-2, !42, etc.
+```
+
+---
+# NOTES
+
+```bash
+date +%F" "%H:%M:%S # Get date
+```
+
+Test if `$var` is an integer:
+
 ```bash
 if [ `expr $a + 1 2> /dev/null` ] ; then echo $a is numeric ; else echo $a is not numeric ; fi ;  
 ```
+
 List all files in the current directory with size:
+
 ```bash
 du -csh *
 ```
+
 List the 10 biggest files of current directory:
+
 ```bash
 ls -l --sort=size | head -10  
 ```
+
 List the size of all files and summarized size of directories inside current directory
+
 ```bash
 du -csh * | sort -rh
 ```
@@ -313,17 +807,23 @@ sort
     -r (descending order)
     -h (compare human readable numbers (e.g., 2K 1G))
 ```
+
 Cleaning all logs on a Linux system without deleting the files:
+
 ```bash
 for CLEAN in $(find /var/log/ -type f); do  
     cp /dev/null  $CLEAN  
 done
+
 ```
+
 Append to restricted file:
+
 ```bash
 sudo bash -c 'echo "string" > file'
 echo "string" | sudo tee file.txt  # add -a to append
 ```
 
-## Information Source
+## Information Sources
+
 https://wiki.bash-hackers.org/start
