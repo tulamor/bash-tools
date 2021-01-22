@@ -767,7 +767,24 @@ done
 
 !! can be replaced with any valid expansion i.e. !cat, !-2, !42, etc.
 ```
+---
 
+## Redirections
+
+```bash
+python hello.py > output.txt   # stdout to (file)
+python hello.py >> output.txt  # stdout to (file), append
+python hello.py 2> error.log   # stderr to (file)
+python hello.py 2>&1           # stderr to stdout
+python hello.py 2>/dev/null    # stderr to (null)
+python hello.py &>/dev/null    # stdout and stderr to (null)
+
+python hello.py < foo.txt      # feed foo.txt to stdin for python
+```
+## Script DIR
+```bash
+DIR="${0%/*}"
+```
 ---
 # NOTES
 
@@ -827,3 +844,4 @@ echo "string" | sudo tee file.txt  # add -a to append
 ## Information Sources
 
 https://wiki.bash-hackers.org/start
+
