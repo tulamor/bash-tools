@@ -785,6 +785,27 @@ python hello.py < foo.txt      # feed foo.txt to stdin for python
 ```bash
 DIR="${0%/*}"
 ```
+
+
+## Conditional execution
+```bash
+git commit && git push
+git commit || echo "Commit failed"
+```
+
+## Read input
+```bash
+echo -n "Proceed? [y/n]: "
+read ans
+echo $ans
+```
+
+
+
+read -n 1 ans    # Just one character
+
+
+
 ---
 # NOTES
 
