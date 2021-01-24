@@ -799,13 +799,21 @@ echo -n "Proceed? [y/n]: "
 read ans
 echo $ans
 ```
-
-
-
 read -n 1 ans    # Just one character
 
+## Backslash escapes
 
+```bash
+!"#&'(),;<>[|\]^{}`$*?
+```
 
+## Grep check
+
+```bash
+if grep -q 'foo' ~/.bash_history; then
+    echo "You appear to have typed 'foo' in the past"
+fi
+```
 ---
 # NOTES
 
