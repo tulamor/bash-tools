@@ -28,9 +28,10 @@ $*      -  list of all arguments, "$*" expands to a single string separated
            by space (the first character of IFS) - "$1 $2 $n"
 $@      -  list of all arguments, "$@" expands to separate strings - "$1" "$2" "$n"
            When not double-quoted, $* and $@ are the same
-$$      -  process id of the shell
+$$      -  process id of the shell (PID)
 $_      -  last argument of the previous command
 $-      -  current options
+$!      -  PID of last background task
 ```
 
 IFS - The shell treats each character of IFS as a delimiter, and splits the results of the other expansions into words on these characters.
@@ -799,21 +800,13 @@ echo -n "Proceed? [y/n]: "
 read ans
 echo $ans
 ```
+
+    
+
 read -n 1 ans    # Just one character
 
-## Backslash escapes
 
-```bash
-!"#&'(),;<>[|\]^{}`$*?
-```
 
-## Grep check
-
-```bash
-if grep -q 'foo' ~/.bash_history; then
-    echo "You appear to have typed 'foo' in the past"
-fi
-```
 ---
 # NOTES
 
