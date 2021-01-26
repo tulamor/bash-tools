@@ -34,7 +34,8 @@ $-      -  current options
 $!      -  PID of last background task
 ```
 
-IFS - The shell treats each character of IFS as a delimiter, and splits the results of the other expansions into words on these characters.
+IFS - Internal Field Separator (word splitting)  
+When set to a string, each character in the string is considered by Bash as a delimiter to separate words.  
 
 ```bash
 echo "grapefruit|grapes|peach|mango" > fruits.txt
@@ -803,9 +804,13 @@ echo $ans
 
     
 
-read -n 1 ans    # Just one character
-
-
+read -n 1 ans    # Just one character  
+---
+## Unofficial strict mode
+```bash
+set -euo pipefail
+IFS=$'\n\t'
+```
 
 ---
 # NOTES
