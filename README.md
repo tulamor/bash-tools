@@ -70,6 +70,11 @@ echo {A, B}.js  # A.js B.js
 echo {1..5}     # 1 2 3 4 5
 ```
 
+## Backslash escapes
+```
+ !"#&'(),;<>[|\]^{}`$*?
+```
+
 ## Command substitution
 
 ```bash
@@ -275,6 +280,14 @@ sed -e 's/{{find}}/{{replace}}/' -e 's/{{find}}/{{replace}}/' {{filename}}
 sed -n 's/REGEX/&/p' text.txt
 cat text.txt | grep -i "REGEX"
 ```
+
+```bash
+if grep -q 'foo' ~/.bash_history; then
+    echo "True"
+fi
+#grep -q, --quiet, --silent
+```
+
 
 ---
 # REGEX
