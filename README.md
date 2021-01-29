@@ -885,3 +885,7 @@ echo "string" | sudo tee file.txt  # add -a to append
 
 https://wiki.bash-hackers.org/start
 
+apropos (Search in manpages)
+Learn about mnemonics in Linux
+
+vs_code_settings > type: enter > Accept Suggestion On Enter > off
