@@ -14,7 +14,7 @@ sudo apt-get install -y virtualbox-6.0 # (version 6.1 is not supported by defaul
 sudo apt-get install vagrant
 vagrant init centos/7
 
-### Using vagrand
+### Using vagrant
 
 # change resources under config.vm.provider
 # vagrant up
@@ -28,17 +28,41 @@ vagrant init centos/7
 vagrant ssh
 
 ### Create actual web server using centos 7
+### Apache
+yum install httpd
+systemctl status httpd
+systemctl enable httpd
+systemctl start httpd
+systemctl stop httpd
+systemctl reload httpd <-- just reload configuration of apache (instead of restart)
+journalctl -u apache.service
 
-sudo yum install httpd
-sudo systemctl status httpd
-sudo systemctl enable httpd
-sudo systemctl start  httpd
 
-# /var/log/httpd <-- apache logs located here
-# /var/www/html  <-- put the actual index.html page here
+# ports configuration
+nano /etc/apache2/ports.conf     [On Debian/Ubuntu]
+nano /etc/httpd/conf/httpd.conf  [On RHEL/CentOS]
+setenforce 0 <-- if apache coould not start tru to Disable SELinux temporarily for debugging
+
+/var/www/html  # index.html location
+tail /var/log/httpd/access_log
+tail /var/log/httpd/error_log
 
 
-# systemctl reload httpd <-- just reload configuration of apache (instead of restart)
-# systemctl stop httpd
+### NGINX
+yum install epel-release yum-utils # # add the CentOS 7 EPEL repository
+yum install nginx
+systemctl start nginx
+systemctl enable nginx # enable Nginx to start when your system boots
+
+nano /etc/nginx/nginx.conf # global configuration
+tail /var/log/nginx/access.log
+tail /var/log/nginx/error.log
+sudo nginx -t # -t test configuration for nginx
+
+### PHP
+yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+yum-config-manager --enable remi-php73
+yum install php php-fpm
+
 
 ```
