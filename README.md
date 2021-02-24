@@ -1,16 +1,22 @@
 
 ```bash
-var=value
 NAME="Alex"
-echo ${NAME}     #   Alex
-echo $NAME       #   Alex
-echo "$NAME"     #   Alex
-echo '$NAME'     #   $NAME
-echo "${NAME}!"  #   Alex!
-var=`echo command`
-echo $var        # command
-function_name () { echo `date`; }
-echo $(function_name) # Mon 04 Jan 2021 06:55:50 PM EST
+
+echo ${NAME}          # -->  Alex
+echo $NAME            # -->  Alex
+echo "$NAME"          # -->  Alex
+echo '$NAME'          # -->  $NAME
+echo "${NAME}!"       # -->  Alex!
+echo "Hello $NAME!"   # -->  Hello Alex!
+
+VAR=`uname`
+echo $VAR             # -->  Linux
+
+function_name () { echo -ne "`date`\n`uname`\n";}
+# -e option will interpret backslahes for the escape sequence
+# -n option will remove the trailing newline in the output
+echo $(function_name) # -->  Tue 16 Feb 2021 06:47:26 PM EST Linux
+
 ```
 
 ## Arguments
@@ -19,7 +25,7 @@ Special parameters
 
 ```
 Arguments can be accessed using $x where x is the index of the argument 0-9:
-$0      -  the name of the file  or the function
+$0      -  the name of the file or the function
 $1      -  first argument (index starts from 1)
 $123    -  first argument concatenated with string '23'
 $?      -  exit code of the last command
@@ -61,6 +67,48 @@ done < "$file"
                    https://www.gnu.org/software/bash/manual/html_node/Single-Quotes.html#Single-Quotes
 `command`       -  results of command passed as one argument
 ```
+## Handling multiline strings
+cat > file.config << EOL # expansion enabled, to disable, put EOL into the single quotes 'EOL'
+$variable
+line 1,
+line 2,
+line 3,
+EOL
+
+
+
+
+## Comments
+
+`#` <-- single line comment
+
+By nature Bash doesn’t support multiline comments (try to avoid them), but there are several workarounds.
+
+HEREDOC notation with the bash null command  
+It is a type of redirection that allows to pass multiple lines of input to a command.  
+`":"` - is a shorthand for true and it does not process any parameters
+```bash
+# make sure to single quote the heredoc delimiter to avoid expansion
+: << 'COMMENT'
+This is a multiline block comment in bash
+using the heredoc delimiter with single quotes
+COMMENT
+```
+
+Another bad practice to make multiline comments:
+```bash
+: '   <-- open multiline comment section
+'     <-- close comment section
+
+: '
+This
+is a
+Multiline
+Comment
+'
+```
+
+
 
 ## Brace expansion
 
