@@ -89,7 +89,7 @@ It is a type of redirection that allows to pass multiple lines of input to a com
 `":"` - is a shorthand for true and it does not process any parameters
 ```bash
 # make sure to single quote the heredoc delimiter to avoid expansion
-: << 'COMMENT'
+: <<'COMMENT'
 This is a multiline block comment in bash
 using the heredoc delimiter with single quotes
 COMMENT
@@ -107,8 +107,22 @@ Multiline
 Comment
 '
 ```
+***
+## Echo newline in Bash
+-e enable interpretation of backslash escapes for echo
+```bash
+echo -e "Hello\nworld"
+echo -e 'Hello\nworld'
+echo Hello$'\n'world
+echo Hello ; echo world
+echo $'hello\nworld'
 
+printf "hello\nworld\n"
 
+echo "hello
+world"
+# Shift + Enter breaks the line
+```
 
 ## Brace expansion
 
